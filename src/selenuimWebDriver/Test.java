@@ -3,13 +3,20 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import java.time.Duration;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
+import java.time.Duration;
 
 public class Test {
     public static void main(String[] args) {
@@ -19,12 +26,12 @@ public class Test {
         // Initialize the ChromeDriver
         WebDriver driver = new ChromeDriver();
 
-        try {
+     
             // Navigate to the Lancôme0 USA website0
-            driver.get("https://www.lancome-usa.com/");
+            driver.get("https://customer-staging.epallet.com/");
             System.out.println("Successfully opened the website");
-
-            WebElement  logoPresent = driver.findElement(By.cssSelector(".c-logo"));
+        
+            WebElement  logoPresent = driver.findElement(By.cssSelector(".styles_logoImg___arJP"));
             if (logoPresent.isDisplayed()) {
                 System.out.println("Logo is displayed successfully.");
             } else {
@@ -32,50 +39,46 @@ public class Test {
             }
            
 
-            // Verify the "E-mail sign up", "My account" and "My bag" links are displayed
-            WebElement emailSignUp = driver.findElement(By.cssSelector(".c-text-field__input"));
-            WebElement myAccount = driver.findElement(By.cssSelector(".c-hamburger__item-link"));
-            WebElement myBag = driver.findElement(By.cssSelector(".c-minicart-icon__link"));
+           // Verify the "E-mail sign up", "My account" and "My bag" links are displayed
+           WebElement emailSignUp = driver.findElement(By.cssSelector(".styles_itemsWrapper__EolXq"));
+           WebElement emailSignIn = driver.findElement(By.xpath("//*[@id=\"__next\"]/header/div[2]/div/div[2]/div[2]/a[1]/button"));
+           WebElement contactUs = driver.findElement(By.xpath("//*[@id=\"__next\"]/header/div[1]/div[2]/a[1]"));
+         //   WebElement myBag = driver.findElement(By.cssSelector(".c-minicart-icon__link"));
 
-            if (emailSignUp.isDisplayed()&& myAccount.isDisplayed()&& myBag.isDisplayed()) {
-                System.out.println("E-mail Sign Up, My Account, and My Bag links are displayed successfully.");
+            if (emailSignUp.isDisplayed()&& contactUs.isDisplayed()) {
+                System.out.println("E-mail Sign Up,contactUs links are displayed successfully.");
             } else {
                 System.out.println("One or more of the required links are not displayed.");
             }
             
-         // Click on the "My account" link
-          myBag.click();
-            System.out.println("I Clicked on 'My Bag' link.");
+       // Click on the "emailSignIn" link
+            emailSignIn.click();
+          System.out.println("I Clicked on 'emailSignIn' link.");   
+          WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+          wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='__next']/div[1]/div[3]")));
           
+          
+           WebElement loginTitle = driver.findElement(By.xpath(("//*[@id=\"__next\"]/div[1]/div[4]/form/div/div[1]/span")));
+           String loginTitleText = loginTitle.getText();
+        if (loginTitleText.equals("Sign in")) {
+                System.out.println("Login form title is correct.");
+           } else {
+                System.out.println("Login form title is incorrect.");
+           }
+        WebDriverWait wait2 = new WebDriverWait(driver, Duration.ofSeconds(30));
+        wait2.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='__next']/div[1]/div[3]")));
+        // Find the email and password input fields and enter valid credentials
+        WebElement emailField = driver.findElement(By.xpath("//*[@id=\"Email\"]")); 
+        WebElement passwordField = driver.findElement(By.xpath("//*[@id=\"Password\"]"));
 
-            // Get the title of the login form and verify it equals "Registered Members"
-//            WebElement loginTitle = driver.findElement(By.cssSelector(".c-account__title.h-text-size-26.h-text-uppercase"));
-//            String loginTitleText = loginTitle.getText();
-//            if (loginTitleText.equals("Registered Members")) {
-//                System.out.println("Login form title is correct.");
-//            } else {
-//                System.out.println("Login form title is incorrect.");
-//            }
-        
-            
-            WebElement loginButton = driver.findElement(By.cssSelector(".c-field"));
-            loginButton.click();
-            System.out.println("I Clicked on login Button ");
+        // Enter email and password
+        emailField.sendKeys("fhani0899@gmail.com");
+        passwordField.sendKeys("fatimaEng2002214");
 
-            
-            WebElement accountNavLink = driver.findElement(By.cssSelector(".c-account__user-name.h-show-for-large"));
-            String accountName = accountNavLink.getText();
+        // Find and click the sign-in button
+        WebElement signInButton = driver.findElement(By.xpath("//*[@id=\"__next\"]/div[1]/div[4]/form/div/div[6]/button")); 
+        signInButton.click();
+        System.out.println("Clicked on the 'log in' button.");
 
-            if (accountName.contains("Fatima Hani ")) {  
-                System.out.println("User logged in successfully.");
-            } else {
-                System.out.println("Login failed or user name mismatch.");
-
-            }} catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Close the browser
-        	 driver.quit();
-        }
-    }
+}
 }
